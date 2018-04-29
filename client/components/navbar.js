@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout, createNewt} from '../store'
-import { Menu, Icon, Grid, Popup, Button} from 'semantic-ui-react'
+import { Menu, Icon, Grid, Popup, Button, Form, Input, TextArea} from 'semantic-ui-react'
 
 export class Navbar extends Component{
   constructor(){
@@ -41,13 +41,28 @@ export class Navbar extends Component{
     </Grid>
   </Popup>
         </Menu.Item>
-        <Menu.Item name="list" active={activeItem === 'list'} onClick={this.handleItemClick}>
+        <Menu.Item href="/newts" name="list" active={activeItem === 'list'} onClick={this.handleItemClick}>
           <Icon size="huge" name="list" />
-          <Link to="/newts" />
         </Menu.Item>
 
         <Menu.Item name="add" active={activeItem === 'add'} onClick={this.handleItemClick}>
-          <Icon size="huge" name="add" />
+
+          <Popup
+   position="bottom right"
+   wide
+   trigger={<Icon size="huge" name="add" />}
+   on="click">
+    <Grid divided rows="equal">
+       <Form>
+       <Grid.Row>
+          <Form.Field  control={Input} label="Title" placeholder="Title..." />
+      </Grid.Row>
+      <Grid.Row>
+      <Form.Field control={TextArea} label="Newt" placeholder="Start typing..." />
+      </Grid.Row>
+      </Form>
+    </Grid>
+  </Popup>
         </Menu.Item>
       </Menu>
         </div>
@@ -63,14 +78,10 @@ export class Navbar extends Component{
    on="click">
     <Grid divided columns="equal">
       <Grid.Column>
-        <Button color="green" fluid>
-        <Link to="/login">LOGIN</Link>
-        </Button>
+        <Button href="/login" content="LOGIN" color="green" fluid />
       </Grid.Column>
       <Grid.Column>
-        <Button color="red" fluid>
-        <Link to="/signup">SIGNUP</Link>
-        </Button>
+        <Button href="/signup" content="SIGNUP" color="red" fluid />
       </Grid.Column>
     </Grid>
   </Popup>
