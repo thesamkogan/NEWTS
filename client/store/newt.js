@@ -33,7 +33,8 @@ export const createNewt = newt =>
       .post('/api/newts', newt)
       .then(res => {
         console.log('thunk test');
-        return dispatch(newNewt(res.data))
+        dispatch(newNewt(res.data))
+        history.push('/newt')
       })
       .catch(err => console.log(err))
 

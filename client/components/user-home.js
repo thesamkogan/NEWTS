@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+
 // import {
 //   Editor,
 //   EditorState,
@@ -7,81 +6,125 @@ import { connect } from 'react-redux';
 //   convertFromRaw,
 //   convertToRaw
 // } from 'draft-js';
-import ReactQuill from 'react-quill'; // ES6
+// import ReactQuill from 'react-quill'; // ES6
+// import { Delta } from 'quill';
+// import 'react-quill/dist/quill.snow.css';
+
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { fetchNewts, createNewt, updateNewt, deleteNewt } from '../store/newt';
 import { Button, Segment } from 'semantic-ui-react';
-import { Delta } from 'quill';
-// import 'react-quill/dist/quill.snow.css';
+
+export class UserHome extends Component {
+    constructor() {
+      super();
+      this.state = {};
+  //     this.quillRef = null;
+  //     this.reactQuillRef = null;
+  //     this.handleChange = this.handleChange.bind(this);
+  //     this.handleClick = this.handleClick.bind(this);
+  //     this.attachQuillRefs = this.attachQuillRefs.bind(this);
+    }
+    componentDidMount () {
+      this.props.loadInitialData()
+    }
+    render() {
+    const {newt} = this.props
+    setTimeout(() => console.log(this.props), 1000);
+
+          return (
+            <Segment>
+            {newt && newt.map(thisnewt =>
+            <Button key={thisnewt.content}>{thisnewt.content}</Button>
+            )}
+            </Segment>
+
+          )
+  }
+}
+
+
+const mapState = ({ user, newt }) => ({ user, newt });
+const mapDispatch = dispatch => ({
+  updateNewt,
+  deleteNewt,
+  createNewt,
+  loadInitialData () {
+    dispatch(fetchNewts());
+  }
+});
+
+export default connect(mapState, mapDispatch)(UserHome);
 
 /**
  * COMPONENT
  */
-export class UserHome extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { text: '', mountedEditor: false };
-    this.quillRef = null;
-    this.reactQuillRef = null;
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.attachQuillRefs = this.attachQuillRefs.bind(this);
-  }
+// export class UserHome extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = { text: '', mountedEditor: false };
+//     this.quillRef = null;
+//     this.reactQuillRef = null;
+//     this.handleChange = this.handleChange.bind(this);
+//     this.handleClick = this.handleClick.bind(this);
+//     this.attachQuillRefs = this.attachQuillRefs.bind(this);
+//   }
 
-  componentDidMount() {
-    this.attachQuillRefs();
-    // this.props.fetchInitialData(this.props.user.id);
-  }
+//   componentDidMount() {
+//     this.attachQuillRefs();
+//     // this.props.fetchInitialData(this.props.user.id);
+//   }
 
-  componentDidUpdate() {
-    this.attachQuillRefs();
-    this.props.updateNewt({ content: this.state.text, userId: this.props.user.id })
-  }
-  componentWillUnmount(){
-    if (!this.state.text) this.props.deleteNewt(this.props.newt.id)
-  }
+//   componentDidUpdate() {
+//     this.attachQuillRefs();
+//     this.props.updateNewt({ content: this.state.text, userId: this.props.user.id })
+//   }
+//   componentWillUnmount(){
+//     if (!this.state.text) this.props.deleteNewt(this.props.newt.id)
+//   }
 
-  attachQuillRefs() {
-    // Ensure React-Quill reference is available:
-    if (typeof this.reactQuillRef.getEditor !== 'function') return;
-    // Skip if Quill reference is defined:
-    if (this.quillRef !== null) return;
+//   attachQuillRefs() {
+//     // Ensure React-Quill reference is available:
+//     if (typeof this.reactQuillRef.getEditor !== 'function') return;
+//     // Skip if Quill reference is defined:
+//     if (this.quillRef !== null) return;
 
-    const quillRef = this.reactQuillRef.getEditor();
-    if (quillRef !== null) this.quillRef = quillRef;
-  }
+//     const quillRef = this.reactQuillRef.getEditor();
+//     if (quillRef !== null) this.quillRef = quillRef;
+//   }
 
-  handleClick() {
-    var range = this.quillRef.getSelection();
-    let position = range ? range.index : 0;
-    this.quillRef.insertText(position, 'Hello, World! ');
-  }
+//   handleClick() {
+//     var range = this.quillRef.getSelection();
+//     let position = range ? range.index : 0;
+//     this.quillRef.insertText(position, 'Hello, World! ');
+//   }
 
-  handleChange(html) {
-    if (html) {
-      this.props.updateNewt(1, {
-      content: html
-    });
-  }}
+//   handleChange(html) {
+//     if (html) {
+//       this.props.updateNewt(1, {
+//       content: html
+//     });
+//   }}
 
-  render() {
-    return (
-      <Segment>
-        <ReactQuill
-          ref={el => {
-            this.reactQuillRef = el;
-          }}
-          theme={'snow'}
-          onChange={this.handleChange}
-          modules={UserHome.modules}
-          formats={UserHome.formats}
-          defaultValue={this.state.editorHtml}
-          placeholder={this.props.placeholder}
-        />
-        <Button onClick={this.handleClick}>Insert Text</Button>
-      </Segment>
-    );
-  }
-}
+//   render() {
+//     return (
+//       <Segment>
+//         <ReactQuill
+//           ref={el => {
+//             this.reactQuillRef = el;
+//           }}
+//           theme={'snow'}
+//           onChange={this.handleChange}
+//           modules={UserHome.modules}
+//           formats={UserHome.formats}
+//           defaultValue={this.state.editorHtml}
+//           placeholder={this.props.placeholder}
+//         />
+//         <Button onClick={this.handleClick}>Insert Text</Button>
+//       </Segment>
+//     );
+//   }
+// }
 
 // class UserHome extends Component {
 //   constructor(props) {
@@ -140,53 +183,43 @@ export class UserHome extends Component {
 //   }
 // }
 
-const mapState = ({ newt, newts, user }) => ({ newt, newts, user });
-const mapDispatch = () => ({
-  updateNewt,
-  deleteNewt,
-  createNewt
-  // fetchInitialData(id) {
-  //   dispatch(createNewt({content: 'here', userId: id}));
-  // }
-});
 
-UserHome.modules = {};
-UserHome.modules.toolbar = [
-  ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-  ['blockquote', 'code-block'], // blocks
-  [{ header: 1 }, { header: 2 }], // custom button values
-  [{ list: 'ordered' }, { list: 'bullet' }], // lists
-  [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-  [{ header: [1, 2, 3, 4, 5, 6, false] }], // header dropdown
-  [{ color: [] }, { background: [] }], // dropdown with defaults
-  [{ font: [] }], // font family
-  [{ align: [] }], // text align
-  ['clean'],
-  ['image'] // remove formatting
-];
-UserHome.formats = [
-  'header',
-  'font',
-  'background',
-  'color',
-  'code',
-  'size',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'script',
-  'align',
-  'direction',
-  'link',
-  'image',
-  'code-block',
-  'formula',
-  'video'
-];
+// UserHome.modules = {};
+// UserHome.modules.toolbar = [
+//   ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+//   ['blockquote', 'code-block'], // blocks
+//   [{ header: 1 }, { header: 2 }], // custom button values
+//   [{ list: 'ordered' }, { list: 'bullet' }], // lists
+//   [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+//   [{ header: [1, 2, 3, 4, 5, 6, false] }], // header dropdown
+//   [{ color: [] }, { background: [] }], // dropdown with defaults
+//   [{ font: [] }], // font family
+//   [{ align: [] }], // text align
+//   ['clean'],
+//   ['image'] // remove formatting
+// ];
+// UserHome.formats = [
+//   'header',
+//   'font',
+//   'background',
+//   'color',
+//   'code',
+//   'size',
+//   'bold',
+//   'italic',
+//   'underline',
+//   'strike',
+//   'blockquote',
+//   'list',
+//   'bullet',
+//   'indent',
+//   'script',
+//   'align',
+//   'direction',
+//   'link',
+//   'image',
+//   'code-block',
+//   'formula',
+//   'video'
+// ];
 
-export default connect(mapState, mapDispatch)(UserHome);

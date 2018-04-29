@@ -25,7 +25,7 @@ class Routes extends Component {
           isLoggedIn &&
             <Switch>
               {/* Routes placed here are only available after logging in */}
-              <Route path="/newts" component={UserHome} />
+              <Route path="/home" component={UserHome} />
             </Switch>
         }
         {/* Displays our Login component as a fallback */}
@@ -50,7 +50,6 @@ const mapDispatch = (dispatch) => {
   return {
     loadInitialData () {
       dispatch(me())
-      dispatch(fetchNewts());
     }
   }
 }
