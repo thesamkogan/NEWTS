@@ -335,10 +335,9 @@ function (_Component) {
     value: function render() {
       var _props = this.props,
           handleClick = _props.handleClick,
-          isLoggedIn = _props.isLoggedIn,
-          newNewt = _props.newNewt;
+          isLoggedIn = _props.isLoggedIn;
       var activeItem = this.state.activeItem;
-      return _react.default.createElement("div", null, _react.default.createElement("h1", null, "NEWTS!"), _react.default.createElement("nav", null, isLoggedIn ? _react.default.createElement("div", null, _react.default.createElement(_semanticUiReact.Menu, null, _react.default.createElement(_semanticUiReact.Menu.Item, {
+      return _react.default.createElement("div", null, _react.default.createElement("nav", null, isLoggedIn ? _react.default.createElement("div", null, _react.default.createElement(_semanticUiReact.Menu, null, _react.default.createElement(_semanticUiReact.Menu.Item, {
         name: "user",
         active: activeItem === 'user',
         onClick: this.handleItemClick
@@ -354,16 +353,18 @@ function (_Component) {
         divided: true,
         columns: "equal"
       }, _react.default.createElement(_semanticUiReact.Grid.Column, null, _react.default.createElement(_semanticUiReact.Button, {
+        fitted: true,
         color: "blue",
         content: "INFO",
         fluid: true
       })), _react.default.createElement(_semanticUiReact.Grid.Column, null, _react.default.createElement(_semanticUiReact.Button, {
+        fitted: true,
         color: "red",
         onClick: handleClick,
         content: "LOGOUT",
         fluid: true
       }))))), _react.default.createElement(_semanticUiReact.Menu.Item, {
-        href: "/newts",
+        href: "/home",
         name: "list",
         active: activeItem === 'list',
         onClick: this.handleItemClick
@@ -378,6 +379,7 @@ function (_Component) {
         position: "bottom right",
         wide: true,
         trigger: _react.default.createElement(_semanticUiReact.Icon, {
+          fitted: true,
           size: "huge",
           name: "add"
         }),
@@ -393,7 +395,7 @@ function (_Component) {
         control: _semanticUiReact.TextArea,
         label: "Newt",
         placeholder: "Start typing..."
-      })))))))) : _react.default.createElement("div", null, _react.default.createElement(_semanticUiReact.Menu, null, _react.default.createElement(_semanticUiReact.Menu.Item, {
+      })))))), _react.default.createElement(_semanticUiReact.Menu.Item, null, _react.default.createElement("h1", null, "NEWTS!")))) : _react.default.createElement("div", null, _react.default.createElement(_semanticUiReact.Menu, null, _react.default.createElement(_semanticUiReact.Menu.Item, {
         name: "user",
         active: activeItem === 'user',
         onClick: this.handleItemClick
@@ -441,10 +443,6 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     handleClick: function handleClick() {
       dispatch((0, _store.logout)());
-    },
-    newNewt: function newNewt() {
-      console.log(this.props.user.id);
-      dispatch((0, _store.createNewt)());
     }
   };
 };
@@ -498,9 +496,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 var UserHome =
 /*#__PURE__*/
@@ -513,16 +511,53 @@ function (_Component) {
     _classCallCheck(this, UserHome);
 
     _this = _possibleConstructorReturn(this, (UserHome.__proto__ || Object.getPrototypeOf(UserHome)).call(this));
+    Object.defineProperty(_assertThisInitialized(_this), "handleChange", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value(e, _ref) {
+        var _value = _ref.value;
+        return _this.setState({
+          content: _value
+        });
+      }
+    });
+    Object.defineProperty(_assertThisInitialized(_this), "handleSubmit", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value() {
+        var id = _this.props.user.id;
+        var content = _this.state.content;
+        console.log(id);
+        console.log(content);
+
+        _this.props.add({
+          content: content
+        });
+
+        _this.setState({
+          content: ''
+        });
+      }
+    });
     _this.state = {}; //     this.quillRef = null;
     //     this.reactQuillRef = null;
-    //     this.handleChange = this.handleChange.bind(this);
-    //     this.handleClick = this.handleClick.bind(this);
-    //     this.attachQuillRefs = this.attachQuillRefs.bind(this);
+
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleDelete = _this.handleDelete.bind(_assertThisInitialized(_this)); //     this.attachQuillRefs = this.attachQuillRefs.bind(this);
 
     return _this;
   }
 
   _createClass(UserHome, [{
+    key: "handleDelete",
+    value: function handleDelete(e, data) {
+      console.log('data, ', data);
+      this.props.destroy(data);
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.loadInitialData();
@@ -534,13 +569,41 @@ function (_Component) {
 
       var newt = this.props.newt;
       setTimeout(function () {
-        return console.log(_this2.props);
+        return console.log(_this2.state);
       }, 1000);
-      return _react.default.createElement(_semanticUiReact.Segment, null, newt && newt.map(function (thisnewt) {
-        return _react.default.createElement(_semanticUiReact.Button, {
-          key: thisnewt.content
-        }, thisnewt.content);
-      }));
+      return _react.default.createElement("div", null, _react.default.createElement(_semanticUiReact.Segment, null, _react.default.createElement(_semanticUiReact.List, {
+        divided: true,
+        verticalAlign: "middle"
+      }, _react.default.createElement(_semanticUiReact.List.Item, null, _react.default.createElement(_semanticUiReact.Form, {
+        onSubmit: this.handleSubmit
+      }, _react.default.createElement(_semanticUiReact.Form.Group, null, _react.default.createElement(_semanticUiReact.List.Content, {
+        floated: "right"
+      }, _react.default.createElement(_semanticUiReact.Icon, {
+        type: "submit",
+        onClick: this.handleSubmit,
+        size: "large",
+        circular: true,
+        bordered: false,
+        name: "add"
+      })), _react.default.createElement(_semanticUiReact.Form.Field, null, _react.default.createElement(_semanticUiReact.Input, {
+        size: "large" // placeholder="Newt..."
+        ,
+        required: true,
+        name: "content",
+        value: this.state.content,
+        onChange: this.handleChange
+      }))))), newt && newt.map(function (thisnewt) {
+        return _react.default.createElement(_semanticUiReact.List.Item, {
+          key: thisnewt.id
+        }, _react.default.createElement(_semanticUiReact.Segment, null, _react.default.createElement(_semanticUiReact.List.Content, {
+          floated: "right"
+        }, _react.default.createElement(_semanticUiReact.Icon, {
+          name: "delete",
+          onClick: function onClick(e) {
+            return _this2.props.destroy(thisnewt.id);
+          }
+        })), _react.default.createElement(_semanticUiReact.List.Content, null, _react.default.createElement("h3", null, thisnewt.content))));
+      }))));
     }
   }]);
 
@@ -549,9 +612,9 @@ function (_Component) {
 
 exports.UserHome = UserHome;
 
-var mapState = function mapState(_ref) {
-  var user = _ref.user,
-      newt = _ref.newt;
+var mapState = function mapState(_ref2) {
+  var user = _ref2.user,
+      newt = _ref2.newt;
   return {
     user: user,
     newt: newt
@@ -561,8 +624,12 @@ var mapState = function mapState(_ref) {
 var mapDispatch = function mapDispatch(dispatch) {
   return {
     updateNewt: _newt.updateNewt,
-    deleteNewt: _newt.deleteNewt,
-    createNewt: _newt.createNewt,
+    destroy: function destroy(id) {
+      dispatch((0, _newt.deleteNewt)(id));
+    },
+    add: function add(content) {
+      dispatch((0, _newt.createNewt)(content));
+    },
     loadInitialData: function loadInitialData() {
       dispatch((0, _newt.fetchNewts)());
     }
@@ -570,156 +637,6 @@ var mapDispatch = function mapDispatch(dispatch) {
 };
 
 var _default = (0, _reactRedux.connect)(mapState, mapDispatch)(UserHome);
-/**
- * COMPONENT
- */
-// export class UserHome extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { text: '', mountedEditor: false };
-//     this.quillRef = null;
-//     this.reactQuillRef = null;
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleClick = this.handleClick.bind(this);
-//     this.attachQuillRefs = this.attachQuillRefs.bind(this);
-//   }
-//   componentDidMount() {
-//     this.attachQuillRefs();
-//     // this.props.fetchInitialData(this.props.user.id);
-//   }
-//   componentDidUpdate() {
-//     this.attachQuillRefs();
-//     this.props.updateNewt({ content: this.state.text, userId: this.props.user.id })
-//   }
-//   componentWillUnmount(){
-//     if (!this.state.text) this.props.deleteNewt(this.props.newt.id)
-//   }
-//   attachQuillRefs() {
-//     // Ensure React-Quill reference is available:
-//     if (typeof this.reactQuillRef.getEditor !== 'function') return;
-//     // Skip if Quill reference is defined:
-//     if (this.quillRef !== null) return;
-//     const quillRef = this.reactQuillRef.getEditor();
-//     if (quillRef !== null) this.quillRef = quillRef;
-//   }
-//   handleClick() {
-//     var range = this.quillRef.getSelection();
-//     let position = range ? range.index : 0;
-//     this.quillRef.insertText(position, 'Hello, World! ');
-//   }
-//   handleChange(html) {
-//     if (html) {
-//       this.props.updateNewt(1, {
-//       content: html
-//     });
-//   }}
-//   render() {
-//     return (
-//       <Segment>
-//         <ReactQuill
-//           ref={el => {
-//             this.reactQuillRef = el;
-//           }}
-//           theme={'snow'}
-//           onChange={this.handleChange}
-//           modules={UserHome.modules}
-//           formats={UserHome.formats}
-//           defaultValue={this.state.editorHtml}
-//           placeholder={this.props.placeholder}
-//         />
-//         <Button onClick={this.handleClick}>Insert Text</Button>
-//       </Segment>
-//     );
-//   }
-// }
-// class UserHome extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { editorState: EditorState.createEmpty() };
-//     this.onChange = editorState => {
-//       console.log();
-//       const contentState = editorState.getCurrentContent();
-//       updateNewt(convertToRaw(contentState));
-//       this.setState({ editorState });
-//     };
-//     this._onBoldClick = () => {
-//       this.onChange(
-//         RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD')
-//       );
-//     };
-//     this.handleKeyCommand = this.handleKeyCommand.bind(this);
-//   }
-//   handleKeyCommand(command, editorState) {
-//     const newState = RichUtils.handleKeyCommand(editorState, command);
-//     if (newState) {
-//       this.onChange(newState);
-//       return 'handled';
-//     }
-//     return 'not-handled';
-//   }
-//   componentDidMount() {
-//     this.props.fetchInitialData();
-//   }
-//   render() {
-//     const { newt } = this.props;
-//     console.log(this.props)
-//     return (
-//       <div>
-//         <Button type="primary" onClick={this._onBoldClick.bind(this)}>
-//           Bold
-//         </Button>
-//         <Divider orientation="left">Text v</Divider>
-//         <Segment>
-//         <Editor
-//           editorState={this.state.editorState}
-//           handleKeyCommand={this.handleKeyCommand}
-//           onChange={this.onChange}
-//         />
-//         </Segment>
-//         <Divider>TEXT^</Divider>
-//       </div>
-//     );
-//   }
-// }
-// UserHome.modules = {};
-// UserHome.modules.toolbar = [
-//   ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-//   ['blockquote', 'code-block'], // blocks
-//   [{ header: 1 }, { header: 2 }], // custom button values
-//   [{ list: 'ordered' }, { list: 'bullet' }], // lists
-//   [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-//   [{ header: [1, 2, 3, 4, 5, 6, false] }], // header dropdown
-//   [{ color: [] }, { background: [] }], // dropdown with defaults
-//   [{ font: [] }], // font family
-//   [{ align: [] }], // text align
-//   ['clean'],
-//   ['image'] // remove formatting
-// ];
-// UserHome.formats = [
-//   'header',
-//   'font',
-//   'background',
-//   'color',
-//   'code',
-//   'size',
-//   'bold',
-//   'italic',
-//   'underline',
-//   'strike',
-//   'blockquote',
-//   'list',
-//   'bullet',
-//   'indent',
-//   'script',
-//   'align',
-//   'direction',
-//   'link',
-//   'image',
-//   'code-block',
-//   'formula',
-//   'video'
-// ];
-
 
 exports.default = _default;
 
@@ -1073,6 +990,39 @@ var killNewt = function killNewt(id) {
   };
 };
 /**
+ * REDUCER
+ */
+
+
+function _default() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case GET_NEWTS:
+      return action.newts;
+
+    case NEW_NEWT:
+      {
+        console.log('hereeeeee');
+        return [action.newt].concat(_toConsumableArray(state));
+      }
+
+    case EDIT_NEWT:
+      return state.map(function (newt) {
+        return action.newt.id === newt.id ? action.newt : newt;
+      });
+
+    case DELETE_NEWT:
+      return state.filter(function (newt) {
+        return newt.id !== action.id;
+      });
+
+    default:
+      return state;
+  }
+}
+/**
  * THUNK CREATORS
  */
 
@@ -1092,10 +1042,7 @@ exports.fetchNewts = fetchNewts;
 var createNewt = function createNewt(newt) {
   return function (dispatch) {
     return _axios.default.post('/api/newts', newt).then(function (res) {
-      console.log('thunk test');
-      dispatch(newNewt(res.data));
-
-      _history.default.push('/newt');
+      return dispatch(newNewt(res.data));
     }).catch(function (err) {
       return console.log(err);
     });
@@ -1107,7 +1054,6 @@ exports.createNewt = createNewt;
 var updateNewt = function updateNewt(id, newt) {
   return function (dispatch) {
     return _axios.default.put("/api/newts/".concat(id), newt).then(function (res) {
-      console.log('HELP');
       return dispatch(editNewt(res.data));
     }).catch(function (err) {
       return console.log(err);
@@ -1119,46 +1065,15 @@ exports.updateNewt = updateNewt;
 
 var deleteNewt = function deleteNewt(id) {
   return function (dispatch) {
-    return _axios.default.delete("/api/newts/".concat(id)).then(function (res) {
-      return dispatch(killNewt(res.data));
+    _axios.default.delete("/api/newts/".concat(id)).then(function () {
+      return dispatch(killNewt(id));
     }).catch(function (err) {
-      return console.log(err);
+      return console.error("Removing newt: ".concat(id, " unsuccessful"), err);
     });
   };
 };
-/**
- * REDUCER
- */
-
 
 exports.deleteNewt = deleteNewt;
-
-function _default() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var action = arguments.length > 1 ? arguments[1] : undefined;
-  console.log(action);
-
-  switch (action.type) {
-    case GET_NEWTS:
-      return action.newts;
-
-    case NEW_NEWT:
-      return [action.newt].concat(_toConsumableArray(state));
-
-    case EDIT_NEWT:
-      return state.map(function (newt) {
-        return action.newt.id === newt.id ? action.newt : newt;
-      });
-
-    case DELETE_NEWT:
-      return state.filter(function (newt) {
-        return newt.id !== action.id;
-      });
-
-    default:
-      return state;
-  }
-}
 
 /***/ }),
 

@@ -1,12 +1,12 @@
 body {
-  font-family: sans-serif;
+  background-color: rgb(4, 9, 54)
 }
 
 h1, Link, a {
   font-family: 'Nova Mono', monospace !important;
 }
 
-a {
+/* a {
   text-decoration: none;
 }
 
@@ -22,4 +22,4 @@ nav a {
 form div {
   margin: 1em;
   display: inline-block;
-}
+} */

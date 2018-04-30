@@ -4,7 +4,7 @@ const HttpError = require('../utils/HttpError');
 
 module.exports = router
 
-router.param('id', (req, res, next, id) => {
+router.param('newtid', (req, res, next, id) => {
   Newt.findById(id, {
     include: [{
       // model: Category,
@@ -17,6 +17,7 @@ router.param('id', (req, res, next, id) => {
       if (!newt) throw new HttpError(404);
       req.newt = newt;
       next();
+      return null
     })
     .catch(next);
 });
@@ -33,16 +34,16 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
+  req.body.userId = req.session.passport.user;
   Newt.create(req.body)
   .then(newt => res.json(newt))
   .catch(next)
 })
 
-router.put('/:id', (req, res, next) => {
-  req.newt
-    .update(req.body)
-    .then(edited => {
-      console.log('edited');
-      return res.json(edited)})
-    .catch(next)
+router.delete('/:newtid', (req, res, next) => {
+  Newt.destroy({where: {
+    id: req.params.newtid
+  }})
+    .then(() => res.sendStatus(204))
+    .catch(next);
 });

@@ -15,7 +15,8 @@ const Newt = require('./newts')
  * instead of: const User = require('../db/models/user')
  */
 
-User.hasOne(Newt)
+User.hasMany(Newt)
+Newt.belongsTo(User)
 
 module.exports = {
   User,
